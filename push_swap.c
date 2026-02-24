@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkisala <mkisala@student.42.fr>           +#+  +:+       +#+        */
+/*   By: mkisala <mkisala@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/23 20:40:00 by mkisala           #+#    #+#             */
-/*   Updated: 2026/02/23 20:45:00 by mkisala          ###   ########.fr       */
+/*   Created: 2026/02/23 15:14:50 by mkisala           #+#    #+#             */
+/*   Updated: 2026/02/23 17:27:43 by mkisala          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	main(int ac, char **av)
 {
 	t_stack	a;
 	t_stack	b;
-	char	*line;
+	char	*joined;
 
 	a.top = NULL;
 	a.size = 0;
@@ -24,16 +24,18 @@ int	main(int ac, char **av)
 	b.size = 0;
 	if (ac < 2)
 		return (0);
-	parse_args_stack(ac, av, &a);
-	while (get_line(&line))
+	joined = ft_strjoin_args(ac, av);
+	if (!joined)
+		return (1);
+	parse_string(&a, joined, joined);
+	check_duplicates(&a);
+	if (is_sorted(&a))
 	{
-		execute_instruction(line, &a, &b);
-		free(line);
+		free_stack(&a);
+		return (0);
 	}
-	if (is_sorted_checker(&a) && b.size == 0)
-		write(1, "OK\n", 3);
-	else
-		write(1, "KO\n", 3);
+	assign_index(&a);
+	sort_stack(&a, &b);
 	free_stack(&a);
 	free_stack(&b);
 	return (0);

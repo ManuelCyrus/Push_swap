@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: mkisala <mkisala@student.42.fr>            +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2026/02/23 20:14:17 by mkisala           #+#    #+#              #
+#    Updated: 2026/02/23 20:15:55 by mkisala          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 GREEN := \033[0;32m
 RESET := \033[0m
 
@@ -10,10 +22,10 @@ CFLAGS := -Wall -Wextra -Werror
 # ======================
 # Fontes
 # ======================
-SRC_PUSH := main.c $(wildcard src/utils/*.c) $(wildcard src/algorithm/*.c)
+SRC_PUSH := push_swap.c $(wildcard src/utils/*.c) $(wildcard src/algorithm/*.c) 
 OBJ_PUSH := $(SRC_PUSH:.c=.o)
 
-SRC_CHECKER := checker.c $(wildcard src/utils/*.c) $(wildcard src/algorithm/*.c)
+SRC_CHECKER := checker.c $(wildcard src/utils/*.c) $(wildcard src/algorithm/*.c) $(wildcard checker_utils/*.c)
 OBJ_CHECKER := $(SRC_CHECKER:.c=.o)
 
 # ======================

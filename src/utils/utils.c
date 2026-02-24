@@ -1,69 +1,111 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkisala <mkisala@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/23 17:32:22 by mkisala           #+#    #+#             */
+/*   Updated: 2026/02/23 17:43:27 by mkisala          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/push_swap.h"
 
-
-void error(void)
+long	ft_atol(const char *str, int *err)
 {
-    write(2,"Error\n",6);
-    exit(1);
+	long	res;
+	int		sign;
+
+	res = 0;
+	sign = 1;
+	*err = 0;
+	if (*str == '-' || *str == '+')
+	{
+		if (*str == '-')
+			sign = -1;
+		str++;
+	}
+	if (!(*str >= '0' && *str <= '9'))
+		*err = 1;
+	while (!*err && *str >= '0' && *str <= '9')
+	{
+		if (res > (LONG_MAX - (*str - '0')) / 10)
+			*err = 1;
+		res = res * 10 + (*str++ - '0');
+	}
+	if (*str != '\0' || res > INT_MAX || res < INT_MIN)
+		*err = 1;
+	return (res * sign);
 }
 
-void error_free(t_stack *a, t_stack *b)
+int	is_sorted(t_stack *a)
 {
-    if (a)
-        free_stack(a);
-    if (b)
-        free_stack(b);
-    write(2, "Error\n", 6);
-    exit(1);
+	t_node	*tmp;
+	int		i;
+
+	tmp = a->top;
+	i = 0;
+	while (i < a->size - 1)
+	{
+		if (tmp->data > tmp->next->data)
+			return (0);
+		tmp = tmp->next;
+		i++;
+	}
+	return (1);
 }
 
-long ft_atol(const char *str, t_stack *a)
+int	ft_strlen(const char *s)
 {
-    long res = 0;
-    int sign = 1;
+	int	len;
 
-    if (*str == '-' || *str == '+')
-    {
-        if (*str == '-')
-            sign = -1;
-        str++;
-    }
-
-    if (!(*str >= '0' && *str <= '9'))
-        error_free(a, NULL);
-
-    while (*str >= '0' && *str <= '9')
-    {
-        int digit = *str - '0';
-
-        if (sign == 1 && res > (LONG_MAX - digit) / 10)
-            error_free(a, NULL);
-
-        if (sign == -1 && -res < (LONG_MIN + digit) / 10)
-            error_free(a, NULL);
-
-        res = res * 10 + digit;
-        str++;
-    }
-
-    if (*str != '\0')
-        error_free(a, NULL);
-
-    res *= sign;
-
-    if (res > INT_MAX || res < INT_MIN)
-        error_free(a, NULL);
-
-    return res;
+	len = 0;
+	while (s[len] != '\0')
+		len++;
+	return (len);
 }
 
-int is_sorted(t_stack *a)
+static int	total_len(int ac, char **av)
 {
-    t_node *tmp = a->top;
-    for(int i=0;i<a->size-1;i++)
-    {
-        if(tmp->data>tmp->next->data) return 0;
-        tmp=tmp->next;
-    }
-    return 1;
+	int	len;
+	int	i;
+
+	len = 0;
+	i = 1;
+	while (i < ac)
+	{
+		len += ft_strlen(av[i]);
+		if (i < ac - 1)
+			len++;
+		i++;
+	}
+	return (len);
+}
+
+char	*ft_strjoin_args(int ac, char **av)
+{
+	int		len;
+	char	*res;
+	int		pos;
+	int		i;
+	int		j;
+
+	len = total_len(ac, av);
+	res = malloc(len + 1);
+	if (!res)
+		return (NULL);
+	pos = 0;
+	i = 1;
+	while (i < ac)
+	{
+		j = 0;
+		while (av[i][j])
+			res[pos++] = av[i][j++];
+		if (i < ac - 1)
+			res[pos++] = ' ';
+		i++;
+	}
+	res[pos] = '\0';
+	return (res);
 }
